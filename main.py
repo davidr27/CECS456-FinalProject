@@ -7,6 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import cv2
+from sklearn.model_selection import train_test_split
 
 # export the data
 # directory
@@ -30,7 +31,7 @@ for filename in os.listdir('raw-img'):
     for picture in os.listdir(animalFolder):
         e += 1
         pathPicture = os.path.join(animalFolder, picture)
-        print(pathPicture)
+        # print(pathPicture)
         img = mpimg.imread(pathPicture)
         # resized the image to 128x 128 since the images size varies on the folder provided
         resized_img = cv2.resize(img, (128, 128), interpolation=cv2.INTER_NEAREST)
@@ -42,13 +43,20 @@ for filename in os.listdir('raw-img'):
             X.append(resized_img)
             y.append(i)
         # for testing purposes only since we have huge dataset of images
-        if e == 10:
-            break
+        # if e == 10:
+        #     break
     i += 1
 
 # #convert list to numpy array
 X = np.array(X)
 y = np.array(y)
-print("hey there")
 print(type(X), X.shape)
 print(type(y), y.shape)
+
+
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.30, random_state=2)
+
+print(X_train.shape)
+print(X_val.shape)
+print(y_train.shape)
+print(y_val.shape)
