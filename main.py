@@ -52,7 +52,10 @@ X = np.array(X)
 y = np.array(y)
 print(type(X), X.shape)
 print(type(y), y.shape)
+# we already obtained the images in our X array and our label in our y array
+# we might need to do the transfer learning .....
 
+# after transfer learning
 
 X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.30, random_state=2)
 
