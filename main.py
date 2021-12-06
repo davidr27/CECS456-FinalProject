@@ -9,6 +9,14 @@ import matplotlib.image as mpimg
 import cv2
 from sklearn.model_selection import train_test_split
 
+print(tf.__version__)
+import keras
+from keras.datasets import cifar10
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+##from keras.utils import to_catergorical
+from keras.utils.np_utils import to_categorical
+
 # export the data
 # directory
 translate = {"cane": "dog", "cavallo": "horse", "elefante": "elephant", "farfalla": "butterfly", "gallina": "chicken",
@@ -50,16 +58,64 @@ for filename in os.listdir('raw-img'):
 # #convert list to numpy array
 X = np.array(X)
 y = np.array(y)
-print(type(X), X.shape)
-print(type(y), y.shape)
+print("X numpy array: ", type(X), X.shape)
+print("y numpy array: ", type(y), y.shape)
 # we already obtained the images in our X array and our label in our y array
 # we might need to do the transfer learning .....
 # we need to research transfer learning for the next part of the project
 # after transfer learning
+# Load data set
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=2)
+print("X_train: ", x_train.shape)
+print("X_val: ", x_test.shape)
+print("y_train: ", y_train.shape)
+print("y_val: ", y_test.shape)
 
-X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.30, random_state=2)
+# Normalize data set to 0-to-1 range
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
+x_train /= 255
+x_test /= 255
 
-print(X_train.shape)
-print(X_val.shape)
-print(y_train.shape)
-print(y_val.shape)
+# Convert class vectors to binary class matrices
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+# Create a model and add layers
+model = Sequential()
+
+model.add(Conv2D(32, (3, 3), padding='same', input_shape=(128, 128, 3), activation="relu"))
+model.add(Conv2D(32, (3, 3), activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3, 3), padding='same', activation="relu"))
+model.add(Conv2D(64, (3, 3), activation="relu"))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(512, activation="relu"))
+model.add(Dropout(0.5))
+model.add(Dense(10, activation="softmax"))
+
+# Compile the model
+model.compile(
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy']
+)
+
+# Print a summary of the model
+model.summary()
+
+# Train the model
+model.fit(x_train, y_train, batch_size=64, epochs=30, validation_data=(x_test, y_test), shuffle=True)
+
+# Save neural network structure
+model_structure = model.to_json()
+f = Path("model_structure.json")
+f.write_text(model_structure)
+
+# Save neural network's trained weights
+model.save_weights("model_weights.h5")
