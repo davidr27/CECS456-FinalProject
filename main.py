@@ -114,8 +114,8 @@ model.fit(x_train, y_train, batch_size=64, epochs=30, validation_data=(x_test, y
 
 # Save neural network structure
 model_structure = model.to_json()
-f = Path("model_structure.json")
-f.write_text(model_structure)
+f = open("model_structure.json", 'w')
+f.write(model_structure)
 
 # Save neural network's trained weights
 model.save_weights("model_weights.h5")
