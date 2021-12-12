@@ -1,22 +1,15 @@
 # importing libraries
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
 import os
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import cv2
 from sklearn.model_selection import train_test_split
-
-print(tf.__version__)
-import keras
-from keras.datasets import cifar10
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
-##from keras.utils import to_catergorical
 from keras.utils.np_utils import to_categorical
 
+print(tf.__version__)
 # export the data
 # directory
 translate = {"cane": "dog", "cavallo": "horse", "elefante": "elephant", "farfalla": "butterfly", "gallina": "chicken",
@@ -24,10 +17,8 @@ translate = {"cane": "dog", "cavallo": "horse", "elefante": "elephant", "farfall
              "cavallo": "horse", "elephant": "elefante", "butterfly": "farfalla", "chicken": "gallina", "cat": "gatto",
              "cow": "mucca", "spider": "ragno", "squirrel": "scoiattolo"}
 
-# X is the array of images
-# y is the labels
-X = []  # images
-y = []  # labels
+images = []  # the array of images
+labels = []  # the array of labels
 i = 0  # variable to name labels.. since we have different names such as "cane", "dog" we gotta assign numbers to differentiate
 
 # iterate over files in that directory
@@ -48,24 +39,22 @@ for filename in os.listdir('raw-img'):
         # some images are corrupted. Therefore a validation set is necessary to avoid error
         # populating the matrix of each image into X and the label into y accordingly
         if resized_img.shape == (128, 128, 3):
-            X.append(resized_img)
-            y.append(i)
+            images.append(resized_img)
+            labels.append(i)
         # for testing purposes only since we have huge dataset of images
         # if e == 10:
         #     break
     i += 1
 
 # #convert list to numpy array
-X = np.array(X)
-y = np.array(y)
-print("X numpy array: ", type(X), X.shape)
-print("y numpy array: ", type(y), y.shape)
+images = np.array(images)
+labels = np.array(labels)
+print("X numpy array: ", type(images), images.shape)
+print("y numpy array: ", type(labels), labels.shape)
 # we already obtained the images in our X array and our label in our y array
-# we might need to do the transfer learning .....
-# we need to research transfer learning for the next part of the project
-# after transfer learning
+
 # Load data set
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=2)
+x_train, x_test, y_train, y_test = train_test_split(images, labels, test_size=0.30, random_state=2)
 print("X_train: ", x_train.shape)
 print("X_val: ", x_test.shape)
 print("y_train: ", y_train.shape)

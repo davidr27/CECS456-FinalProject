@@ -1,3 +1,4 @@
+# importing libraries
 from keras.models import model_from_json
 from pathlib import Path
 from keras.preprocessing import image
@@ -17,7 +18,7 @@ model = model_from_json(model_structure)
 model.load_weights("model_weights.h5")
 
 # Load an image file to test, resizing it to 128x128 pixels (as required by this model)
-img = image.load_img("greycat.jpg", target_size=(128, 128))
+img = image.load_img("whitepomeranian.jpg", target_size=(128, 128))
 
 # Convert the image to a numpy array
 image_to_test = image.img_to_array(img) / 255
