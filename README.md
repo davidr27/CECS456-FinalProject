@@ -1,4 +1,6 @@
 # CECS456-FinalProject
-Final Project 
-To run the file, please type the following on the terminal: python main.py
-Also if running into trouble importing cv2 library. You need to type the following commmand on the terminal: pip3 install opencv-python
+Original Model - PyCharm
+To train the model, please python main.py first. Then this will create model_structure.json and model_weights.h5 files
+To make the predictions, run the predictions.py file. This python file will use the model_structure.json and model_weights.h5 files
+On line #20 change the name of the ".jpg" to one of the images provided, Ex: img = image.load_img("Buddy.jpg", target_size=(128, 128))
+The program will give you the likelihood of what kind of animal it is.
